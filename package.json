@@ -1,0 +1,30 @@
+{
+  "name": "leafmcbe",
+  "version": "1.0.0",
+  "description": "A minecraft bedrock server written in Javascript with @PrismarineJS/bedrock-protocol!",
+  "type": "module",
+  "main": "start.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hvlxh/LeafMCBE.git"
+  },
+  "author": "hvlxh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hvlxh/LeafMCBE/issues"
+  },
+  "homepage": "https://github.com/hvlxh/LeafMCBE#readme",
+  "dependencies": {
+    "bedrock-protocol": "^3.22.0"
+  },
+  "devDependencies": {
+    "chalk": "^5.2.0",
+    "eslint": "^8.33.0",
+    "nodemon": "^2.0.20",
+    "yaml": "^2.2.1"
+  }
+}
