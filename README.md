@@ -45,5 +45,5 @@ class Example extends Base {
 
 ## Todo List
 
-- Convert Packet into JS (not json)
-- Add chunk support (maybe)
+- Convert Packet into JS
+- Add chunk support
