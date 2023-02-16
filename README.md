@@ -5,7 +5,8 @@ A Server Software for Minecraft: Bedrock Edition written in Javascript (With typ
 ## Link
 
 [Discord](https://discord.gg/MdkcEWjdEn) <br>
-[Protocol](https://github.com/PrismarineJS/bedrock-protocol)
+[Protocol](https://github.com/PrismarineJS/bedrock-protocol) <br>
+[Example Plugin](https://github.com/LeafMCBE/ExamplePlugin)
 
 ## Features
 
