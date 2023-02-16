@@ -16,7 +16,6 @@ function Shutdown(server) {
 
     const document = new YML.Document(content);
 
-    console.log(String(document));
     fs.writeFileSync(
       `./leaf/players/${content.username}.yml`,
       String(document),
