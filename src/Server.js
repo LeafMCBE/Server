@@ -11,6 +11,7 @@ import Events from "./api/Events.js";
 import Ban from "./api/Ban.js";
 import Interact from "./packets/handler/Interact.js";
 import ContainerClose from "./packets/ContainerClose.js";
+import Toast from "./api/packets/Toast.js";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
@@ -147,6 +148,11 @@ class Server {
           });
 
           client.on("spawn", async () => {
+            const toast = new Toast();
+            toast.setTitle("Do it!");
+            toast.setMessage("fuck someone");
+            toast.execute(new Player(client));
+
             if (
               fs.statSync(`./leaf/players/${client.username}.yml`)?.isFile()
             ) {
