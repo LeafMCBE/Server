@@ -3,12 +3,10 @@ Server:
   port: 19132
   motd: "Dedicated LeafMCBE Server"
   version: 1.19.50
-
 LeafMCBE:
   debug: true
   showDateOnLogging: true
   doNotCrashOnError: true
-
 World:
   gamemode: "creative" # survival / creative / adventure
   dimension: "flat" # overworld / flat / nether / end / void

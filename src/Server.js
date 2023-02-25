@@ -1,6 +1,6 @@
 import Protocol from "bedrock-protocol";
 import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResponse.js";
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import YML from "yaml";
 import { Logger } from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
@@ -11,70 +11,89 @@ import Events from "./api/Events.js";
 import Ban from "./api/Ban.js";
 import Interact from "./packets/handler/Interact.js";
 import ContainerClose from "./packets/ContainerClose.js";
-import { access, readFile, mkdir } from "fs/promises";
-const config = fs.readFileSync("./leaf/config.yml", "utf-8");
-
-if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
-  process.on("uncaughtException", (e) => console.error(e));
-  process.on("uncaughtExceptionMonitor", (e) => console.error(e));
-  process.on("unhandledRejection", (e) => console.error(e));
-}
+import { mkdir } from "fs/promises";
 
 class Server {
   clients = [];
   banned = new Ban();
-  config = YML.parse(config);
-  logger = {
-    srv: new Logger({ name: "Server", debug: this.config.LeafMCBE.debug }),
-    plugin: new Logger({ name: "Plugins", debug: this.config.LeafMCBE.debug }),
-    chat: new Logger({ name: "Chat", debug: this.config.LeafMCBE.debug }),
-  };
   console = new CCS();
   events = new Events();
   plugins = new Plugins();
   srv;
 
+  async writeConfig() {
+    if (!fs.existsSync("./leaf")) {
+      mkdir("./leaf").then(async () => {
+        if (!fs.existsSync("./leaf/config.yml")) {
+          await this.writeConfig();
+        }
+      });
+    }
+    fs.writeFileSync(
+      "./leaf/config.yml",
+      `Server:
+  host: 0.0.0.0
+  port: 19132
+  motd: "Dedicated LeafMCBE Server"
+  version: 1.19.50
+LeafMCBE:
+  debug: true
+  showDateOnLogging: true
+  doNotCrashOnError: true
+World:
+  gamemode: "creative" # survival / creative / adventure
+  dimension: "flat" # overworld / flat / nether / end / void
+  biome: "plains" # https://minecraft-data.prismarine.js.org/?v=bedrock_1.19.50&d=biomes`
+    );
+  }
+
   async validate() {
     new Promise((res) => {
-      access("./leaf")
-        .then(() => {
-          access("./leaf/config.yml")
-            .then(async () => {
-              const config = await readFile("./leaf/config.yml", "utf-8");
-              this.config = YML.parse(config);
-              res();
-            })
-            .catch(async () => {
-              await this.writeConfig();
-              const config = await readFile("./leaf/config.yml", "utf-8");
-              this.config = YML.parse(config);
-              res();
-            });
-        })
-        .catch(() => {
-          mkdir("./leaf").then(() => {
-            access("./leaf/config.yml")
-              .then(async () => {
-                const config = await readFile("./leaf/config.yml", "utf-8");
-                this.config = YML.parse(config);
-                res();
-              })
-              .catch(async () => {
-                await this.writeConfig();
-                const config = await readFile("./leaf/config.yml", "utf-8");
-                this.config = YML.parse(config);
-                res();
-              });
-          });
+      if (!existsSync("./leaf")) {
+        mkdir("./leaf");
+      }
+
+      if (!existsSync("./leaf/config.yml")) {
+        this.writeConfig().then(() => {
+          this.config = YML.parse(
+            fs.readFileSync("./leaf/config.yml", "utf-8")
+          );
         });
+      } else {
+        this.config = YML.parse(fs.readFileSync("./leaf/config.yml", "utf-8"));
+      }
+
+      if (!existsSync("./leaf/players")) {
+        mkdir("./leaf/players");
+      }
+
+      if (!existsSync("./leaf/plugins")) {
+        mkdir("./leaf/plugins");
+      }
+
+      res();
     });
   }
 
   async start() {
     this.validate().then(async () => {
       this.events.emit("serverBeforeStarted");
-      this.logger.srv.info("Starting Server...");
       try {
+        this.logger = {
+          srv: new Logger({
+            name: "Server",
+            debug: this.config.LeafMCBE.debug,
+          }),
+          plugin: new Logger({
+            name: "Plugins",
+            debug: this.config.LeafMCBE.debug,
+          }),
+          chat: new Logger({
+            name: "Chat",
+            debug: this.config.LeafMCBE.debug,
+          }),
+        };
+        this.logger.srv.info("Starting Server...");
         this.srv = await Protocol.createServer({
           host: this.config.Server.host,
           port: this.config.Server.port,
@@ -187,9 +206,7 @@ class Server {
           });
 
           client.on("spawn", async () => {
-            if (
-              fs.statSync(`./leaf/players/${client.username}.yml`)?.isFile()
-            ) {
+            if (fs.existsSync(`./leaf/players/${client.username}.yml`)) {
               const file = fs.readFileSync(
                 `./leaf/players/${client.username}.yml`,
                 { encoding: "utf-8", flag: "r" }
@@ -234,7 +251,7 @@ class Server {
           });
         });
       } catch (e) {
-        this.logger.srv.error(`500 Internal Server Error:`);
+        console.log("ERR");
         throw e;
       }
     });

@@ -3,9 +3,6 @@ import item from "bedrock-protocol/types/Item.js";
 import fs from "fs";
 import YML from "yaml";
 import StartGame from "../StartGame.js";
-const Item = item(
-  YML.parse(fs.readFileSync("./leaf/config.yml", "utf-8")).Server.version
-);
 
 export default class ResourcePackClientResponse {
   /**
@@ -44,6 +41,8 @@ export default class ResourcePackClientResponse {
         }
         break;
       case "completed":
+        const Item = item(YML.parse(server.config.Server.version));
+
         for (let i = 0; i < 3; i++) {
           client.queue("inventory_slot", {
             window_id: 120,

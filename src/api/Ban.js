@@ -3,14 +3,18 @@ import YML from "yaml";
 
 class Ban {
   validate() {
-    if (!fs.statSync("./leaf/banned-player.yml").isFile())
-      fs.writeFileSync("./leaf/banned-player.yml", "---\n[]");
+    return new Promise((res) => {
+      if (!fs.existsSync("./leaf/banned-players.yml"))
+        fs.writeFileSync("./leaf/banned-players.yml", "[]", "utf-8");
+
+      res();
+    });
   }
 
   get() {
     this.validate();
 
-    const file = fs.readFileSync("./leaf/banned-player.yml", "utf-8");
+    const file = fs.readFileSync("./leaf/banned-players.yml", "utf-8");
     /**
      * @type {string[]}
      */
@@ -24,24 +28,25 @@ class Ban {
    * @returns {Promise<boolean>}
    */
   check(player) {
-    this.validate();
+    this.validate().then(() => {
+      const file = fs.readFileSync("./leaf/banned-players.yml", "utf-8");
+      /**
+       * @type {import('./Ban.js').BanList[]}
+       */
+      const banned = YML.parse(file);
+      console.log(file);
 
-    const file = fs.readFileSync("./leaf/banned-player.yml", "utf-8");
-    /**
-     * @type {import('./Ban.js').BanList[]}
-     */
-    const banned = YML.parse(file);
-
-    if (banned.find((v) => v.name === player.username)) {
-      player.kick(
-        `You were been banned by ${
-          banned.find((v) => v.name === player.username).by
-        }.`
-      );
-      return true;
-    } else {
-      return false;
-    }
+      if (banned.find((v) => v.name === player.username)) {
+        player.kick(
+          `You were been banned by ${
+            banned.find((v) => v.name === player.username).by
+          }.`
+        );
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }
 

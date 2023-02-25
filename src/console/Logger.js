@@ -1,12 +1,10 @@
 import chalk from "chalk";
-import fs from "fs";
-import YML from "yaml";
 
-const Config = fs.readFileSync("./leaf/config.yml", "utf-8");
-const config = YML.parse(Config);
 export class Logger {
   constructor(options) {
-    this.options = options;
+    (async () => {
+      this.options = options;
+    })();
   }
 
   warn(text) {
@@ -25,9 +23,11 @@ export class Logger {
     this.write("info", text);
   }
 
-  write(level, text) {
+  async write(level, text) {
     const d = new Date();
-    if (config.LeafMCBE.showDateOnLogging)
+    if (
+      (await import("../../start.js")).default.config.LeafMCBE.showDateOnLogging
+    )
       console.log(
         `[${d
           .toLocaleString()
