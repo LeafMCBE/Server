@@ -1,6 +1,6 @@
-import Server from "../Server.js";
-import { Logger } from "../console/Logger.js";
-import Player from "../api/Player.js";
+import Server from "../../src/Server.js";
+import { Logger } from "../../src/console/Logger.js";
+import Player from "../../src/api/Player.js";
 
 interface ArgOptions {
   name: string;

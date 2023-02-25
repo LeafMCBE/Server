@@ -11,7 +11,7 @@ import Events from "./api/Events.js";
 import Ban from "./api/Ban.js";
 import Interact from "./packets/handler/Interact.js";
 import ContainerClose from "./packets/ContainerClose.js";
-import Toast from "./api/packets/Toast.js";
+import { access, readFile, mkdir } from "fs/promises";
 const config = fs.readFileSync("./leaf/config.yml", "utf-8");
 
 if (YML.parse(config).LeafMCBE.doNotCrashOnError) {
@@ -34,11 +34,48 @@ class Server {
   plugins = new Plugins();
   srv;
 
-  constructor() {
-    (async () => {
+  async validate() {
+    new Promise((res) => {
+      access("./leaf")
+        .then(() => {
+          access("./leaf/config.yml")
+            .then(async () => {
+              const config = await readFile("./leaf/config.yml", "utf-8");
+              this.config = YML.parse(config);
+              res();
+            })
+            .catch(async () => {
+              await this.writeConfig();
+              const config = await readFile("./leaf/config.yml", "utf-8");
+              this.config = YML.parse(config);
+              res();
+            });
+        })
+        .catch(() => {
+          mkdir("./leaf").then(() => {
+            access("./leaf/config.yml")
+              .then(async () => {
+                const config = await readFile("./leaf/config.yml", "utf-8");
+                this.config = YML.parse(config);
+                res();
+              })
+              .catch(async () => {
+                await this.writeConfig();
+                const config = await readFile("./leaf/config.yml", "utf-8");
+                this.config = YML.parse(config);
+                res();
+              });
+          });
+        });
+    });
+  }
+
+  async start() {
+    this.validate().then(async () => {
+      this.events.emit("serverBeforeStarted");
       this.logger.srv.info("Starting Server...");
       try {
-        this.srv = Protocol.createServer({
+        this.srv = await Protocol.createServer({
           host: this.config.Server.host,
           port: this.config.Server.port,
           motd: {
@@ -46,6 +83,8 @@ class Server {
           },
           version: String(this.config.Server.version),
         });
+
+        this.events.emit("serverStarted");
         this.logger.srv.info(
           `Listening to ${this.config.Server.host}:${this.config.Server.port}`
         );
@@ -148,11 +187,6 @@ class Server {
           });
 
           client.on("spawn", async () => {
-            const toast = new Toast();
-            toast.setTitle("Do it!");
-            toast.setMessage("fuck someone");
-            toast.execute(new Player(client));
-
             if (
               fs.statSync(`./leaf/players/${client.username}.yml`)?.isFile()
             ) {
@@ -203,7 +237,11 @@ class Server {
         this.logger.srv.error(`500 Internal Server Error:`);
         throw e;
       }
-    })();
+    });
+  }
+
+  constructor() {
+    this.start();
   }
 
   broadcast(message) {
@@ -340,13 +378,13 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
           /* If there is no block runtime id this means that the player removed the item from his inventory */
         }
 
-        var jsondata = {
+        var jsonData = {
           count,
           network_id,
           block_runtime_id,
         };
 
-        client.items.push(jsondata);
+        client.items.push(jsonData);
         for (let i = 0; i < client.items.length; i++) {
           client.write("inventory_slot", {
             window_id: "inventory",

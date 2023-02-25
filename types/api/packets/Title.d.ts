@@ -1,4 +1,4 @@
-import Player from "../Player.js";
+import Player from "../../../src/api/Player.js";
 
 type TitleType =
   | "clear"

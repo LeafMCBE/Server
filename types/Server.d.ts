@@ -1,10 +1,10 @@
 import { Server, Client, Version } from "bedrock-protocol";
-import { Logger } from "./console/Logger.js";
-import { Plugins } from "./plugins/Plugins.js";
-import CCS from "./console/ConsoleCommandSender.js";
-import Player from "./api/Player.js";
-import Ban from "./api/Ban.js";
-import Events from "./api/Events.js";
+import { Logger } from "../src/console/Logger.js";
+import { Plugins } from "../src/plugins/Plugins.js";
+import CCS from "../src/console/ConsoleCommandSender.js";
+import Player from "../src/api/Player.js";
+import Ban from "../src/api/Ban.js";
+import Events from "../src/api/Events.js";
 
 interface Configure {
   Server: {
