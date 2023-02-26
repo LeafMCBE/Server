@@ -1,17 +1,17 @@
 export default {
-  entity_id: "0",
-  runtime_entity_id: "0",
-  player_gamemode: "creative",
+  entity_id: "-4294967295",
+  runtime_entity_id: "1",
+  player_gamemode: "fallback",
   player_position: {
     x: 0.5,
     y: 32769.62109375,
-    z: 32.5,
+    z: 0.5,
   },
   rotation: {
     x: 0,
     z: 0,
   },
-  seed: [4255547191, 2660200857],
+  seed: [2771770510, 4244726753],
   biome_type: 0,
   biome_name: "plains",
   dimension: "overworld",
@@ -21,11 +21,11 @@ export default {
   spawn_position: {
     x: 0,
     y: 32767,
-    z: 32,
+    z: 0,
   },
   achievements_disabled: true,
   editor_world: false,
-  day_cycle_stop_time: 78,
+  day_cycle_stop_time: 94,
   edu_offer: 0,
   edu_features_enabled: false,
   edu_product_uuid: "",
@@ -253,8 +253,8 @@ export default {
   movement_authority: "server",
   rewind_history_size: 20,
   server_authoritative_block_breaking: false,
-  current_tick: [0, 78],
-  enchantment_seed: 499811508,
+  current_tick: [0, 94],
+  enchantment_seed: 778099427,
   block_properties: [],
   itemstates: [
     {
@@ -6073,7 +6073,7 @@ export default {
       component_based: false,
     },
   ],
-  multiplayer_correlation_id: "b6f472ce-55a4-4487-82c9-3f4eab2c7eb5",
+  multiplayer_correlation_id: "fbf9516f-adfd-4ef6-993f-2e85bd45d5bb",
   server_authoritative_inventory: true,
   engine: "1.19.50",
   property_data: {

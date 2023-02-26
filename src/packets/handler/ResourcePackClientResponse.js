@@ -86,16 +86,21 @@ export default class ResourcePackClientResponse {
           select_slot: true,
         });
         client.queue("crafting_data", await this.get("crafting_data"));
-        client.queue(
-          "available_commands",
-          await this.get("available_commands")
-        );
         client.queue("chunk_radius_update", { chunk_radius: 1 });
         client.queue(
           "game_rules_changed",
           await this.get("game_rules_changed")
         );
         client.queue("respawn", await this.get("respawn"));
+
+        client.queue("level_chunk", await this.get("level_chunk"));
+
+        setInterval(async () => {
+          client.write(
+            "network_chunk_publisher_update",
+            await this.get("network_chunk_publisher_update")
+          );
+        }, 4500);
 
         try {
           for (let plugin of await server.plugins.load()) {
