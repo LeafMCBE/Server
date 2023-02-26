@@ -17,6 +17,9 @@ class Server {
   clients = [];
   banned = new Ban();
   console = new CCS();
+  /**
+   * @type {import('../types/api/Events.js').default}
+   */
   events = new Events();
   plugins = new Plugins();
   srv;
@@ -77,7 +80,7 @@ World:
 
   async start() {
     this.validate().then(async () => {
-      this.events.emit("serverBeforeStarted");
+      this.events.emit("onServerBeforeStart");
       try {
         this.logger = {
           srv: new Logger({
@@ -103,7 +106,7 @@ World:
           version: String(this.config.Server.version),
         });
 
-        this.events.emit("serverStarted");
+        this.events.emit("onServerStarted", this);
         this.logger.srv.info(
           `Listening to ${this.config.Server.host}:${this.config.Server.port}`
         );
@@ -173,7 +176,7 @@ World:
               (v) => v.username === client.username
             );
             delete this.clients[i];
-            this.events.emit("playerLeft", new Player(client));
+            this.events.emit("onPlayerLeft", new Player(client));
 
             let content = {
               username: client.username,
@@ -232,7 +235,7 @@ World:
                 });
               }
             }
-            this.events.emit("playerJoin", new Player(client));
+            this.events.emit("onPlayerJoin", new Player(client));
             try {
               for (let plugin of await this.plugins.load()) {
                 if (plugin.onPlayerJoin)
@@ -345,23 +348,6 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
             );
           }
         });
-        break;
-      case "disconnect":
-        this.events.emit("playerLeft", new Player(client));
-        try {
-          for (let plugin of await this.plugins.load()) {
-            if (plugin.onPlayerLeave) plugin.onPlayerLeave(new Player(client));
-          }
-        } catch (e) {
-          if (this.config.notCrashOnPluginError) {
-            this.logger.srv.warn(
-              `Error from Plugin in Having all rps. Not exiting due to configure.`
-            );
-          } else {
-            this.logger.srv.error(`Error from Plugin`);
-            throw e;
-          }
-        }
         break;
       case "interact":
         Interact(packet, client);
