@@ -151,6 +151,8 @@ World:
               experiments_previously_used: false,
             });
 
+            this.events.emit("onPlayerPreJoin", new Player(client));
+
             try {
               for (let plugin of await this.plugins.load()) {
                 if (plugin.onPlayerPreJoin)
@@ -176,8 +178,11 @@ World:
               (v) => v.username === client.username
             );
             delete this.clients[i];
-            this.events.emit("onPlayerLeft", new Player(client));
-
+            const n = this.events.emit("onPlayerLeave", new Player(client));
+            if (!n) {
+              const m = Colors.yellow(`${client.username} left`);
+              this.broadcast(m);
+            }
             let content = {
               username: client.username,
               items: client.items,
@@ -235,7 +240,13 @@ World:
                 });
               }
             }
-            this.events.emit("onPlayerJoin", new Player(client));
+
+            const n = this.events.emit("onPlayerJoin", new Player(client));
+            if (!n) {
+              const m = Colors.yellow(`${client.username} joined`);
+              this.broadcast(m);
+            }
+
             try {
               for (let plugin of await this.plugins.load()) {
                 if (plugin.onPlayerJoin)
