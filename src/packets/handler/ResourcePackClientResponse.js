@@ -15,7 +15,7 @@ export default class ResourcePackClientResponse {
     switch (packet.data.params.response_status) {
       case "refused":
         server.logger.srv.debug(
-          `${client.username} refused to install rps, kicking...`
+          server.lang.rpsRefused.replace("%p", client.username)
         );
         try {
           for (let plugin of await server.plugins.load()) {
@@ -23,20 +23,22 @@ export default class ResourcePackClientResponse {
               plugin.onPlayerRefusedRps(new Player(client));
           }
         } catch (e) {
-          server.logger.srv.error(`Error from Plugin`);
+          server.logger.srv.error(server.lang.errFromPlugin);
           throw e;
         }
         client.disconnect(`Refused to install RPS`);
         break;
       case "have_all_packs":
-        server.logger.srv.debug(`${client.username} have all the rps.`);
+        server.logger.srv.debug(
+          server.lang.rpsHaveAll.replace("%p", client.username)
+        );
         try {
           for (let plugin of await server.plugins.load()) {
             if (plugin.onPlayerHavingAllRps)
               plugin.onPlayerHavingAllRps(new Player(client));
           }
         } catch (e) {
-          server.logger.srv.error(`Error from Plugin`);
+          server.logger.srv.error(server.lang.errFromPlugin);
           throw e;
         }
         break;
@@ -101,7 +103,7 @@ export default class ResourcePackClientResponse {
               plugin.onPlayerInstalledRps(new Player(client));
           }
         } catch (e) {
-          server.logger.srv.error(`Error from Plugin`);
+          server.logger.srv.error(server.lang.errFromPlugin);
           throw e;
         }
 
@@ -145,7 +147,6 @@ export default class ResourcePackClientResponse {
         });
 
         setTimeout(async () => {
-          // Allow the client to spawn
           client.write("play_status", { status: "player_spawn" });
         }, 3000);
 

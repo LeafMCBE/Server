@@ -33,7 +33,9 @@ class Kick extends Command {
       .getServer()
       .clients.findIndex((v) => v.username === username);
     if (!this.api.getServer().clients[index]) {
-      this.api.getLogger().info(`${username} not online.`);
+      this.api
+        .getLogger()
+        .info(this.api.getServer().lang.notOnline.replace("%p", username));
     }
 
     this.api.getServer().clients[index].kick(`${reason} by CONSOLE`);

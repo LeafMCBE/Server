@@ -53,19 +53,24 @@ export default class CCS {
                 name: "Console",
                 debug: srv.config.LeafMCBE.debug,
               }).info(
-                `Minimum arguments is ${cmd.options.args.min} but got ${
-                  args.length
-                }
-Usage: /${
-                  cmd.options.aliases
-                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
-                    : `${cmd.options.name}`
-                } ${cmd.options.arguments
-                  .map(
-                    (arg) => `
+                srv.lang.minArg
+                  .replace("%m", cmd.options.args.min)
+                  .replace("%r", args.length)
+                  .replace(
+                    "%u",
+                    `/${
+                      cmd.options.aliases
+                        ? `[${cmd.options.name}|${cmd.options.aliases.join(
+                            "|"
+                          )}]`
+                        : `${cmd.options.name}`
+                    } ${cmd.options.arguments
+                      .map(
+                        (arg) => `
 ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
+                      )
+                      .join(" ")}`
                   )
-                  .join(" ")}`
               );
 
             if (args.length > cmd.options.args.max)
@@ -73,23 +78,24 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
                 name: "Console",
                 debug: srv.config.LeafMCBE.debug,
               }).info(
-                `Maximum arguments is ${cmd.options.args.max} but got ${
-                  args.length
-                }
-Usage: /${
-                  cmd.options.aliases
-                    ? `[${cmd.options.name}|${cmd.options.aliases.join("|")}]`
-                    : `${cmd.options.name}`
-                } ${cmd.options.arguments
-                  .map(
-                    (arg) =>
-                      `${
-                        arg.optional
-                          ? `[${arg.name}: ${arg.type}]`
-                          : `<${arg.name}: ${arg.type}>`
-                      }`
+                srv.lang.maxArg
+                  .replace("%m", cmd.options.args.min)
+                  .replace("%r", args.length)
+                  .replace(
+                    "%u",
+                    `/${
+                      cmd.options.aliases
+                        ? `[${cmd.options.name}|${cmd.options.aliases.join(
+                            "|"
+                          )}]`
+                        : `${cmd.options.name}`
+                    } ${cmd.options.arguments
+                      .map(
+                        (arg) => `
+${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
+                      )
+                      .join(" ")}`
                   )
-                  .join(" ")}`
               );
 
             cmd.run(args);

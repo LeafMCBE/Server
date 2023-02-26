@@ -32,7 +32,7 @@ class Player {
    * @param {string | undefined} reason
    */
   kick(reason) {
-    this.client.disconnect(reason || `Kicked for ${reason}`);
+    this.client.disconnect(reason || `Kicked for No reason provided`);
   }
 }
 

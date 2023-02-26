@@ -1,5 +1,6 @@
 import fs from "fs";
 import YML from "yaml";
+import server from "../../start.js";
 
 class Ban {
   validate() {
@@ -36,9 +37,10 @@ class Ban {
       const banned = YML.parse(file);
       if (banned.find((v) => v.name === player.username)) {
         player.kick(
-          `You were been banned by ${
+          server.lang.banned.replace(
+            "%u",
             banned.find((v) => v.name === player.username).by
-          }.`
+          )
         );
         return true;
       } else {

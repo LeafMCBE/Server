@@ -29,7 +29,7 @@ class Ban extends Command {
     const b = this.api.getServer().banned.get();
 
     if (b.includes(args[0]))
-      return this.api.getLogger().info("This player already been banned.");
+      return this.api.getLogger().info(this.api.getServer().lang.alrBan);
 
     if (
       this.api
@@ -39,7 +39,7 @@ class Ban extends Command {
       this.api
         .getServer()
         .clients.filter(async (pl) => pl.client.username === args[0])[0]
-        .kick(`You were been banned by ${player.username}`);
+        .kick(this.api.getServer().lang.banned.replace("%u", player.username));
 
       const doc = new YML.Document();
       b.push({
@@ -66,7 +66,7 @@ class Ban extends Command {
     const b = this.api.getServer().banned.get();
 
     if (b.includes(args[0]))
-      return this.api.getLogger().info("This player already been banned.");
+      return this.api.getLogger().info(this.api.getServer().lang.alrBan);
 
     if (
       this.api
@@ -76,7 +76,7 @@ class Ban extends Command {
       this.api
         .getServer()
         .clients.filter(async (pl) => pl.client.username === args[0])[0]
-        .kick("You were been banned by CONSOLE");
+        .kick(this.api.getServer().lang.banned.replace("%u", "CONSOLE"));
 
       const doc = new YML.Document();
       b.push({

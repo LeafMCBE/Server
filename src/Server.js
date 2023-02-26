@@ -12,6 +12,7 @@ import Ban from "./api/Ban.js";
 import Interact from "./packets/handler/Interact.js";
 import ContainerClose from "./packets/ContainerClose.js";
 import { mkdir } from "fs/promises";
+import LangSelector from "./lang/Selector.js";
 
 class Server {
   clients = [];
@@ -22,6 +23,10 @@ class Server {
    */
   events = new Events();
   plugins = new Plugins();
+  /**
+   * @type {import('../types/base/BaseLang.js').default}
+   */
+  lang;
   srv;
 
   async writeConfig() {
@@ -75,6 +80,8 @@ World:
       }
 
       res();
+
+      this.lang = new LangSelector(this.config);
     });
   }
 
@@ -96,7 +103,7 @@ World:
             debug: this.config.LeafMCBE.debug,
           }),
         };
-        this.logger.srv.info("Starting Server...");
+        this.logger.srv.info(this.lang.startingServer);
         this.srv = await Protocol.createServer({
           host: this.config.Server.host,
           port: this.config.Server.port,
@@ -108,17 +115,22 @@ World:
 
         this.events.emit("onServerStarted", this);
         this.logger.srv.info(
-          `Listening to ${this.config.Server.host}:${this.config.Server.port}`
+          this.lang.startedOn
+            .replace("%i", this.config.Server.host)
+            .replace("%p", this.config.Server.port)
         );
 
         for (let plugin of await this.plugins.load()) {
           this.logger.plugin.info(
-            `Loading ${plugin.options.name}:${plugin.options.version.join(".")}`
+            this.lang.loadingPlugin.replace(
+              "%p",
+              `${plugin.options.name}:${plugin.options.version.join(".")}`
+            )
           );
           if (plugin.onEnable) plugin.onEnable();
         }
 
-        this.logger.srv.debug("Loading Console Command Sender...");
+        this.logger.srv.debug(this.lang.loadingCCS);
         this.console.start();
 
         this.srv.on("connect", async (client) => {
@@ -131,7 +143,12 @@ World:
             const v = await this.banned.check(pl);
             if (!v) this.clients.push(pl);
 
-            this.logger.srv.info(`${client.username}[${client.ip}] connected`);
+            this.logger.srv.info(
+              this.lang.playerConnected.replace(
+                "%p",
+                `${client.username}[${client.ip}]`
+              )
+            );
 
             client.write("resource_packs_info", {
               must_accept: false,
@@ -140,8 +157,6 @@ World:
               texture_packs: [],
             });
 
-            // ResourcePackStack is sent by the server to send the order in which resource packs and behaviour packs
-            // should be applied (and downloaded) by the client.
             client.write("resource_pack_stack", {
               must_accept: false,
               behavior_packs: [],
@@ -167,7 +182,7 @@ World:
               try {
                 this.packet(packet, client);
               } catch (e) {
-                this.logger.error("Packet Error:");
+                this.logger.error(this.lang.errFromPacket);
                 throw e;
               }
             });
@@ -180,7 +195,9 @@ World:
             delete this.clients[i];
             const n = this.events.emit("onPlayerLeave", new Player(client));
             if (!n) {
-              const m = Colors.yellow(`${client.username} left`);
+              const m = Colors.yellow(
+                this.lang.playerLeft.replace("%p", `${client.username}`)
+              );
               this.broadcast(m);
             }
             let content = {
@@ -202,14 +219,8 @@ World:
                   plugin.onPlayerLeave(new Player(client));
               }
             } catch (e) {
-              if (this.config.notCrashOnPluginError) {
-                this.logger.srv.warn(
-                  `Error from Plugin in Having all rps. Not exiting due to configure.`
-                );
-              } else {
-                this.logger.srv.error(`Error from Plugin`);
-                throw e;
-              }
+              this.logger.srv.error(`Error from Plugin`);
+              throw e;
             }
           });
 
@@ -243,7 +254,9 @@ World:
 
             const n = this.events.emit("onPlayerJoin", new Player(client));
             if (!n) {
-              const m = Colors.yellow(`${client.username} joined`);
+              const m = Colors.yellow(
+                this.lang.playerJoined.replace("%p", client.username)
+              );
               this.broadcast(m);
             }
 
@@ -253,14 +266,8 @@ World:
                   plugin.onPlayerJoin(new Player(client));
               }
             } catch (e) {
-              if (this.config.notCrashOnPluginError) {
-                this.logger.srv.warn(
-                  `Error from Plugin in Having all rps. Not exiting due to configure.`
-                );
-              } else {
-                this.logger.srv.error(`Error from Plugin`);
-                throw e;
-              }
+              this.logger.srv.error(this.lang.errFromPlugin);
+              throw e;
             }
           });
         });

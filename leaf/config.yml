@@ -7,6 +7,7 @@ LeafMCBE:
   debug: true
   showDateOnLogging: true
   doNotCrashOnError: true
+  lang: "eng"
 World:
   gamemode: "creative" # survival / creative / adventure
   dimension: "flat" # overworld / flat / nether / end / void

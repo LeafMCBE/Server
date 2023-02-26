@@ -13,7 +13,10 @@ function Interact(packet, client) {
       break;
     default:
       server.logger.srv.warn(
-        `Unhandled player interaction: ${packet.data.params.action_id}`
+        server.lang.unhandledInteract.replace(
+          "%i",
+          packet.data.params.action_id
+        )
       );
   }
 }
