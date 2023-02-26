@@ -34,8 +34,6 @@ class Ban {
        * @type {import('./Ban.js').BanList[]}
        */
       const banned = YML.parse(file);
-      console.log(file);
-
       if (banned.find((v) => v.name === player.username)) {
         player.kick(
           `You were been banned by ${
