@@ -5,8 +5,9 @@
   "type": "module",
   "main": "start.js",
   "scripts": {
-    "start": "node .",
-    "dev": "nodemon ."
+    "start": "node start.js",
+    "dev": "nodemon .",
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import { Server, Client, Version } from "bedrock-protocol";
+import { Server, Version } from "bedrock-protocol";
 import { Logger } from "../src/console/Logger.js";
 import { Plugins } from "../src/plugins/Plugins.js";
 import CCS from "../src/console/ConsoleCommandSender.js";
