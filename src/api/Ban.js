@@ -1,20 +1,24 @@
 /**
-  *  _                 __ __  __  _____ ____  ______ 
-  * | |               / _|  \/  |/ ____|  _ \|  ____|
-  * | |     ___  __ _| |_| \  / | |    | |_) | |__   
-  * | |    / _ \/ _` |  _| |\/| | |    |  _ <|  __|  
-  * | |___|  __/ (_| | | | |  | | |____| |_) | |____ 
-  * |______\___|\__,_|_| |_|  |_|\_____|____/|______|
-  *
-  * Copyright 2023 hvlxh
-  * Github: https://github.com/LeafMCBE/Server
-*/
+ *  _                 __ __  __  _____ ____  ______
+ * | |               / _|  \/  |/ ____|  _ \|  ____|
+ * | |     ___  __ _| |_| \  / | |    | |_) | |__
+ * | |    / _ \/ _` |  _| |\/| | |    |  _ <|  __|
+ * | |___|  __/ (_| | | | |  | | |____| |_) | |____
+ * |______\___|\__,_|_| |_|  |_|\_____|____/|______|
+ *
+ * Copyright 2023 hvlxh
+ * Github: https://github.com/LeafMCBE/Server
+ */
 
 import fs from "fs";
 import YML from "yaml";
 import server from "../../start.js";
 
 class Ban {
+  /**
+   * @private
+   * @returns {Promise<void>}
+   */
   validate() {
     return new Promise((res) => {
       if (!fs.existsSync("./leaf/banned-players.yml"))
@@ -24,12 +28,16 @@ class Ban {
     });
   }
 
+  /**
+   *
+   * @returns {}
+   */
   get() {
     this.validate();
 
     const file = fs.readFileSync("./leaf/banned-players.yml", "utf-8");
     /**
-     * @type {string[]}
+     * @type {object[]}
      */
     const banned = YML.parse(file);
     return banned;
