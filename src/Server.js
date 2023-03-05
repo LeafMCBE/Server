@@ -14,7 +14,7 @@ import Protocol from "bedrock-protocol";
 import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResponse.js";
 import fs, { existsSync } from "fs";
 import YML from "yaml";
-import { Logger } from "./console/Logger.js";
+import Logger from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
 import CCS from "./console/ConsoleCommandSender.js";
