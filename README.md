@@ -1,4 +1,12 @@
-# LeafMCBE
+# DISCONTINUED!
+
+i decided to discontinue because of this popularity. I don't think i can make my own server software without contributors and supporters. <br>
+GreenFrogMCBE, its a server software written in prismarine's protocol. its popularity is good and its under active developer.
+
+[Github](https://github.com/andriycraft/GreenFrogMCBE)<br>
+[Discord](https://discord.gg/Y7DNRKPGDA)
+
+## LeafMCBE
 
 A Server Software for Minecraft: Bedrock Edition written in Javascript (With types). Server under development
 
