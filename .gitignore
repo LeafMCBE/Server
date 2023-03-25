@@ -1,2 +1,4 @@
 node_modules
 generateLicenseHeader.js
+leaf/players
+leaf/banned-players.yml
