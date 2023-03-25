@@ -58,6 +58,14 @@ export default class ResourcePackClientResponse {
         StartGame.player_gamemode = server.config.World.gamemode;
         StartGame.dimension = server.config.World.dimension;
         StartGame.biome = server.config.World.biome;
+        StartGame.world_name = fs.readFileSync(
+          "./leaf/worlds/flat/levelName.txt",
+          "utf-8"
+        );
+        StartGame.level_id = fs.readFileSync(
+          "./leaf/worlds/flat/levelName.txt",
+          "utf-8"
+        );
 
         client.queue("start_game", StartGame);
         client.queue("player_list", await this.get("player_list"));
@@ -102,7 +110,7 @@ export default class ResourcePackClientResponse {
         const db = new LevelDB(`./leaf/worlds/flat/db`);
         await db.open();
 
-        for await (const [key, val] of db.getIterator({
+        for await (const [_key, val] of db.getIterator({
           keyAsBuffer: false,
           valueAsBuffer: false,
         })) {
