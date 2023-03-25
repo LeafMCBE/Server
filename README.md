@@ -1,4 +1,4 @@
-<img width="100px" align="left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnpI4HLNuBlCdaN5lmt3_h00OEMNZ7yiK8EqhgqRY&s"></img>
+<img width="110px" align="left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnpI4HLNuBlCdaN5lmt3_h00OEMNZ7yiK8EqhgqRY&s"></img>
 
 <h1>LeafMCBE</h2>
 <p>A Server Software for Minecraft Bedrock Edition written in Javascript</p>
