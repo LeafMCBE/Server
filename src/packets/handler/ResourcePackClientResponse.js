@@ -1,6 +1,7 @@
 import { Client } from "bedrock-protocol";
 import item from "bedrock-protocol/types/Item.js";
 import fs from "fs";
+import { LevelDB } from "leveldb-zlib";
 import YML from "yaml";
 import StartGame from "../StartGame.js";
 
@@ -87,10 +88,6 @@ export default class ResourcePackClientResponse {
         });
         client.queue("crafting_data", await this.get("crafting_data"));
         client.queue(
-          "available_commands",
-          await this.get("available_commands")
-        );
-        client.queue(
           "game_rules_changed",
           await this.get("game_rules_changed")
         );
@@ -102,20 +99,18 @@ export default class ResourcePackClientResponse {
           saved_chunks: [],
         });
 
-        const chunks = (
-          await import("../../../leaf/worlds/flat.json", {
-            assert: { type: "json" },
-          })
-        ).default;
-        for (const chunk of chunks) {
-          client.queue("level_chunk", {
-            x: chunk.x,
-            y: chunk.y,
-            sub_chunk_count: chunk.sub_chunk_count,
-            cache_enabled: chunk.cache_enabled,
-            payload: chunk.payload.data,
-          });
+        const db = new LevelDB(`./leaf/worlds/flat/db`);
+        await db.open();
+
+        for await (const [key, val] of db.getIterator({
+          keyAsBuffer: false,
+          valueAsBuffer: false,
+        })) {
+          const d = JSON.parse(val);
+          client.queue("level_chunk", d);
         }
+
+        await db.close();
 
         setInterval(() => {
           client.queue("network_chunk_publisher_update", {
@@ -123,15 +118,6 @@ export default class ResourcePackClientResponse {
             radius: 272,
             saved_chunks: [],
           });
-        }, 4500);
-
-        client.queue("level_chunk", await this.get("level_chunk"));
-
-        setInterval(async () => {
-          client.write(
-            "network_chunk_publisher_update",
-            await this.get("network_chunk_publisher_update")
-          );
         }, 4500);
 
         try {
