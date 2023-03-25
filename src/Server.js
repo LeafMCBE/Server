@@ -1,8 +1,20 @@
+/**
+ *  _                 __ __  __  _____ ____  ______
+ * | |               / _|  \/  |/ ____|  _ \|  ____|
+ * | |     ___  __ _| |_| \  / | |    | |_) | |__
+ * | |    / _ \/ _` |  _| |\/| | |    |  _ <|  __|
+ * | |___|  __/ (_| | | | |  | | |____| |_) | |____
+ * |______\___|\__,_|_| |_|  |_|\_____|____/|______|
+ *
+ * Copyright 2023 hvlxh
+ * Github: https://github.com/LeafMCBE/Server
+ */
+
 import Protocol from "bedrock-protocol";
 import ResourcePackClientResponse from "./packets/handler/ResourcePackClientResponse.js";
 import fs, { existsSync } from "fs";
 import YML from "yaml";
-import { Logger } from "./console/Logger.js";
+import Logger from "./console/Logger.js";
 import { Plugins } from "./plugins/Plugins.js";
 import Colors from "./api/Colors.js";
 import CCS from "./console/ConsoleCommandSender.js";
@@ -15,20 +27,75 @@ import { mkdir } from "fs/promises";
 import LangSelector from "./lang/Selector.js";
 
 class Server {
-  clients = [];
-  banned = new Ban();
-  console = new CCS();
   /**
-   * @type {import('../types/api/Events.js').default}
+   * Players of the server stored in here.
+   *
+   * @public
+   * @readonly
+   * @type {import('./api/Player.js').default[]}
+   */
+  clients = [];
+
+  /**
+   * Banned system.
+   *
+   * @private
+   * @readonly
+   * @type {import('./api/Ban.js').default}
+   */
+  banned = new Ban();
+
+  /**
+   * Console command sender
+   *
+   * @private
+   * @readonly
+   * @type {import('./console/ConsoleCommandSender.js').default}
+   */
+  console = new CCS();
+
+  /**
+   * Events.
+   *
+   * @public
+   * @readonly
+   * @type {import('./api/Events.js').default}
    */
   events = new Events();
-  plugins = new Plugins();
+
   /**
-   * @type {import('../types/base/BaseLang.js').default}
+   * Plugins.
+   *
+   * @private
+   * @readonly
+   * @type {import('./plugins/Plugins.js').default}
+   */
+  plugins = new Plugins();
+
+  /**
+   * Language System..
+   *
+   * @private
+   * @readonly
+   * @type {import('./lang/Selector.js').default}
    */
   lang;
+
+  /**
+   * Raknet Server.
+   *
+   * @public
+   * @readonly
+   * @type {import('bedrock-protocol').Server}
+   */
   srv;
 
+  /**
+   * Write the configuration.
+   *
+   * @private
+   * @returns {void};
+   */
   async writeConfig() {
     if (!fs.existsSync("./leaf")) {
       mkdir("./leaf").then(async () => {
@@ -55,6 +122,12 @@ World:
     );
   }
 
+  /**
+   * Validate if something is wrong.
+   *
+   * @private
+   * @returns {Promise<void>}
+   */
   async validate() {
     new Promise((res) => {
       if (!existsSync("./leaf")) {
@@ -83,8 +156,23 @@ World:
 
       this.lang = new LangSelector(this.config);
     });
+
+    console.log(`
+ _                 __ __  __  _____ ____  ______ 
+| |               / _|  \\/  |/ ____|  _ \\|  ____|
+| |     ___  __ _| |_| \\  / | |    | |_) | |__   
+| |    / _ \\/ _\` |  _| |\\/| | |    |  _ <|  __|  
+| |___|  __/ (_| | | | |  | | |____| |_) | |____ 
+|______\\___|\\__,_|_| |_|  |_|\\_____|____/|______|
+`);
   }
 
+  /**
+   * Start the server
+   *
+   * @private
+   * @returns {void}
+   */
   async start() {
     this.validate().then(async () => {
       this.events.emit("onServerBeforeStart");
@@ -284,6 +372,12 @@ World:
     this.start();
   }
 
+  /**
+   * Broadcast a message.
+   *
+   * @public
+   * @returns {void}
+   */
   broadcast(message) {
     this.clients.forEach((pl) => {
       pl.client.queue("text", {
@@ -298,6 +392,12 @@ World:
     this.logger.chat.info(Colors.colorize(message));
   }
 
+  /**
+   * Handle the packets.
+   *
+   * @private
+   * @returns {void}
+   */
   async packet(packet, client) {
     switch (packet.data.name) {
       case "resource_pack_client_response":

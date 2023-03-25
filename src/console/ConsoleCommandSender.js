@@ -1,6 +1,18 @@
+/**
+ *  _                 __ __  __  _____ ____  ______
+ * | |               / _|  \/  |/ ____|  _ \|  ____|
+ * | |     ___  __ _| |_| \  / | |    | |_) | |__
+ * | |    / _ \/ _` |  _| |\/| | |    |  _ <|  __|
+ * | |___|  __/ (_| | | | |  | | |____| |_) | |____
+ * |______\___|\__,_|_| |_|  |_|\_____|____/|______|
+ *
+ * Copyright 2023 hvlxh
+ * Github: https://github.com/LeafMCBE/Server
+ */
+
 import readline from "readline";
 import fs from "fs";
-import { Logger } from "./Logger.js";
+import Logger from "./Logger.js";
 import srv from "../../start.js";
 
 export default class CCS {
@@ -11,6 +23,10 @@ export default class CCS {
     this.commands = [];
   }
 
+  /**
+   * @private
+   * @returns {void}
+   */
   async load() {
     const cmds = fs.readdirSync("./src/commands");
     for (let file of cmds) {
@@ -19,6 +35,10 @@ export default class CCS {
     }
   }
 
+  /**
+   * @public
+   * @returns {void}
+   */
   async start() {
     this.load().then(() => {
       const rl = readline.createInterface({
