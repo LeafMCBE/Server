@@ -39,9 +39,11 @@ export class Plugins {
     const folders = await fs.readdir("./leaf/plugins");
     for (let folder of folders) {
       const url = `file://${process.cwd().replace(/\\/g, "/")}`;
-      const f = (await import(`${url}/leaf/plugins/${folder}/index.js`))
-        .default;
-      _.push(new f());
+      if ((await fs.stat(`./leaf/plugins/${folder}/index.js`)).isFile()) {
+        const f = (await import(`${url}/leaf/plugins/${folder}/index.js`))
+          .default;
+        _.push(new f());
+      }
     }
 
     return _;
