@@ -1,0 +1,3 @@
+[submodule "DonationPlugin"]
+	path = leaf/plugins/Donation
+	url = https://github.com/LeafMCBE/DonationPlugin
