@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/hvlxh/LeafMCBE#readme",
   "dependencies": {
-    "bedrock-protocol": "^3.22.0"
+    "bedrock-protocol": "^3.22.0",
+    "bedrock-provider": "^3.0.0",
+    "leveldb-zlib": "^1.2.0"
   },
   "devDependencies": {
     "chalk": "^5.2.0",

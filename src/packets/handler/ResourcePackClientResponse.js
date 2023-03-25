@@ -13,6 +13,7 @@
 import { Client } from "bedrock-protocol";
 import item from "bedrock-protocol/types/Item.js";
 import fs from "fs";
+import { LevelDB } from "leveldb-zlib";
 import YML from "yaml";
 import StartGame from "../StartGame.js";
 
@@ -69,6 +70,14 @@ export default class ResourcePackClientResponse {
         StartGame.player_gamemode = server.config.World.gamemode;
         StartGame.dimension = server.config.World.dimension;
         StartGame.biome = server.config.World.biome;
+        StartGame.world_name = fs.readFileSync(
+          "./leaf/worlds/flat/levelName.txt",
+          "utf-8"
+        );
+        StartGame.level_id = fs.readFileSync(
+          "./leaf/worlds/flat/levelName.txt",
+          "utf-8"
+        );
 
         client.queue("start_game", StartGame);
         client.queue("player_list", await this.get("player_list"));
@@ -99,15 +108,37 @@ export default class ResourcePackClientResponse {
         });
         client.queue("crafting_data", await this.get("crafting_data"));
         client.queue(
-          "available_commands",
-          await this.get("available_commands")
-        );
-        client.queue("chunk_radius_update", { chunk_radius: 1 });
-        client.queue(
           "game_rules_changed",
           await this.get("game_rules_changed")
         );
         client.queue("respawn", await this.get("respawn"));
+        client.queue("chunk_radius_update", { chunk_radius: 32 });
+        client.queue("network_chunk_publisher_update", {
+          coordinates: { x: 13, y: 155, z: -28 },
+          radius: 272,
+          saved_chunks: [],
+        });
+
+        const db = new LevelDB(`./leaf/worlds/flat/db`);
+        await db.open();
+
+        for await (const [_key, val] of db.getIterator({
+          keyAsBuffer: false,
+          valueAsBuffer: false,
+        })) {
+          const d = JSON.parse(val);
+          client.queue("level_chunk", d);
+        }
+
+        await db.close();
+
+        setInterval(() => {
+          client.queue("network_chunk_publisher_update", {
+            coordinates: { x: 13, y: 155, z: -28 },
+            radius: 272,
+            saved_chunks: [],
+          });
+        }, 4500);
 
         try {
           for (let plugin of await server.plugins.load()) {
