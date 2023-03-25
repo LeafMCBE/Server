@@ -2,7 +2,7 @@ Server:
   host: 0.0.0.0
   port: 19132
   motd: "Dedicated LeafMCBE Server"
-  version: 1.19.50
+  version: 1.19.63
 LeafMCBE:
   debug: true
   showDateOnLogging: true
