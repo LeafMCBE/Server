@@ -1,5 +1,5 @@
 import Player from "../api/Player.js";
-import { Logger } from "../console/Logger.js";
+import Logger from "../console/Logger.js";
 import Server from "../Server.js";
 
 export interface BaseOptions {
@@ -8,7 +8,7 @@ export interface BaseOptions {
   srvVersion: [number, number, number];
 }
 
-export declare class Base {
+export declare class Plugin {
   public readonly api: {
     getLogger: () => Logger;
     getServer: () => Server;

@@ -13,6 +13,16 @@
 import chalk from "chalk";
 
 export default class Logger {
+  /**
+   * @private
+   * @readonly
+   */
+  options;
+
+  /**
+   *
+   * @param {interface { debug: boolean; }} options
+   */
   constructor(options) {
     (async () => {
       this.options = options;
@@ -35,6 +45,11 @@ export default class Logger {
     this.write("info", text);
   }
 
+  /**
+   * @private
+   * @param {type "info" | "warn" | "error" | "debug"} level
+   * @param {string} text
+   */
   async write(level, text) {
     const d = new Date();
     if (
@@ -54,6 +69,10 @@ export default class Logger {
       );
   }
 
+  /**
+   * @private
+   * @param {type "info" | "warn" | "error" | "debug"} level
+   */
   getColorizeLevel(level) {
     switch (level) {
       case "info":

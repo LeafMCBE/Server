@@ -10,7 +10,7 @@
  * Github: https://github.com/LeafMCBE/Server
  */
 
-import { Logger } from "../console/Logger.js";
+import Logger from "../console/Logger.js";
 import srv from "../../start.js";
 
 /**

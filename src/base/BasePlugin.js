@@ -12,7 +12,7 @@
 
 import API from "../plugins/API.js";
 
-export class Base {
+export class Plugin {
   options;
   api;
 
