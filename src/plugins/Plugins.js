@@ -40,10 +40,14 @@ export class Plugins {
     for (let folder of folders) {
       const url = `file://${process.cwd().replace(/\\/g, "/")}`;
 
-      await fs.access(`./leaf/plugins/${folder}/index.js`);
-      const f = (await import(`${url}/leaf/plugins/${folder}/index.js`))
-        .default;
-      _.push(new f());
+      try {
+        await fs.access(`./leaf/plugins/${folder}/index.js`);
+        const f = (await import(`${url}/leaf/plugins/${folder}/index.js`))
+          .default;
+        _.push(new f());
+      } catch {
+        /* empty */
+      }
     }
 
     return _;
