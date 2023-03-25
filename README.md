@@ -1,6 +1,7 @@
-# LeafMCBE
+<img width="60px" align="left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnpI4HLNuBlCdaN5lmt3_h00OEMNZ7yiK8EqhgqRY&s"></img>
 
-A Server Software for Minecraft: Bedrock Edition written in Javascript (With types). Server under development
+<h2>&nbsp;&nbsp;LeafMCBE</h2>
+<p>&nbsp;&nbsp;&nbsp;A Server Software for Minecraft: Bedrock Edition written in Javascript (With types). Server under development</p>
 
 # Link
 
@@ -8,18 +9,11 @@ A Server Software for Minecraft: Bedrock Edition written in Javascript (With typ
 [Protocol](https://github.com/PrismarineJS/bedrock-protocol) <br>
 [Example Plugin](https://github.com/LeafMCBE/ExamplePlugin)
 
-# Features
-
-- Plugins Supported
-- Logger Supported
-- Commands Supported
-- Console Commands Supported
-- Events Supported
-- Chunks Supported (20%)
-
 # Installation
 
-- Clone the repo, `git clone https://github.com/hvlxh/LeafMCBE.git`
+**NOTE:** Before Installing, Check you have `Node` and `Git` haved installed.
+
+- Clone the repo, `git clone --recurse-submodules https://github.com/hvlxh/LeafMCBE.git`
 - Install dependencies, `npm i`
 - Start the server, `node .`, `node start.js`, or `npm run start`
 
@@ -44,6 +38,15 @@ class Example extends Plugin {
   }
 }
 ```
+
+# Features
+
+- Plugins Supported
+- Logger Supported
+- Commands Supported
+- Console Commands Supported
+- Events Supported
+- Chunks Supported (20%)
 
 # Todo List
 
