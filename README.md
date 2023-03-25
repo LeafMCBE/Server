@@ -13,7 +13,7 @@
 
 **NOTE:** Before Installing, Check you have `Node` and `Git` haved installed.
 
-- Clone the repo, `git clone --recurse-submodules https://github.com/hvlxh/LeafMCBE.git`
+- Clone the repo, `git clone --recurse-submodules https://github.com/LeafMCBE/Server.git`
 - Install dependencies, `npm i`
 - Start the server, `node .`, `node start.js`, or `npm run start`
 
