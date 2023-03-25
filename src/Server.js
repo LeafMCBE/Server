@@ -189,19 +189,18 @@ World:
           });
 
           client.on("close", async () => {
+            const un = client.getUserData().displayName;
             const i = this.clients.findIndex(
-              (v) => v.username === client.username
+              (v) => v.username === client.getUserData().displayName
             );
             delete this.clients[i];
             const n = this.events.emit("onPlayerLeave", new Player(client));
             if (!n) {
-              const m = Colors.yellow(
-                this.lang.playerLeft.replace("%p", `${client.username}`)
-              );
+              const m = Colors.yellow(this.lang.playerLeft.replace("%p", un));
               this.broadcast(m);
             }
             let content = {
-              username: client.username,
+              username: un,
               items: client.items,
             };
 
@@ -255,7 +254,10 @@ World:
             const n = this.events.emit("onPlayerJoin", new Player(client));
             if (!n) {
               const m = Colors.yellow(
-                this.lang.playerJoined.replace("%p", client.username)
+                this.lang.playerJoined.replace(
+                  "%p",
+                  client.getUserData().displayName
+                )
               );
               this.broadcast(m);
             }

@@ -3,9 +3,9 @@ export default {
   runtime_entity_id: "1",
   player_gamemode: "fallback",
   player_position: {
-    x: 0.5,
-    y: 32769.62109375,
-    z: 0.5,
+    x: 0,
+    y: -58,
+    z: 0,
   },
   rotation: {
     x: 0,

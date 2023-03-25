@@ -86,12 +86,44 @@ export default class ResourcePackClientResponse {
           select_slot: true,
         });
         client.queue("crafting_data", await this.get("crafting_data"));
-        client.queue("chunk_radius_update", { chunk_radius: 1 });
+        client.queue(
+          "available_commands",
+          await this.get("available_commands")
+        );
         client.queue(
           "game_rules_changed",
           await this.get("game_rules_changed")
         );
         client.queue("respawn", await this.get("respawn"));
+        client.queue("chunk_radius_update", { chunk_radius: 32 });
+        client.queue("network_chunk_publisher_update", {
+          coordinates: { x: 13, y: 155, z: -28 },
+          radius: 272,
+          saved_chunks: [],
+        });
+
+        const chunks = (
+          await import("../../../leaf/worlds/flat.json", {
+            assert: { type: "json" },
+          })
+        ).default;
+        for (const chunk of chunks) {
+          client.queue("level_chunk", {
+            x: chunk.x,
+            y: chunk.y,
+            sub_chunk_count: chunk.sub_chunk_count,
+            cache_enabled: chunk.cache_enabled,
+            payload: chunk.payload.data,
+          });
+        }
+
+        setInterval(() => {
+          client.queue("network_chunk_publisher_update", {
+            coordinates: { x: 13, y: 155, z: -28 },
+            radius: 272,
+            saved_chunks: [],
+          });
+        }, 4500);
 
         client.queue("level_chunk", await this.get("level_chunk"));
 
