@@ -13,9 +13,6 @@
 import Logger from "../console/Logger.js";
 import srv from "../../start.js";
 
-/**
- * @type {import("../../src/base/BasePlugin.js").BaseOptions}
- */
 export default (options) => {
   return {
     /**

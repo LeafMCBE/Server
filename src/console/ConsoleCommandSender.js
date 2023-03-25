@@ -14,6 +14,7 @@ import readline from "readline";
 import fs from "fs";
 import Logger from "./Logger.js";
 import srv from "../../start.js";
+import Colors from "../api/Colors.js";
 
 export default class CCS {
   constructor() {
@@ -63,11 +64,13 @@ export default class CCS {
         }
         let args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g) || [];
 
+        let exists;
         for (let cmd of this.commands) {
           if (
             cmd.options.name === _[0] ||
             cmd.options.aliases?.includes(_[0].toLowerCase())
           ) {
+            exists = true;
             if (args.length < cmd.options.args.min)
               return new Logger({
                 name: "Console",
@@ -120,6 +123,15 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
 
             cmd.run(args);
           }
+        }
+
+        if (!exists) {
+          new Logger({
+            name: "Console",
+            debug: srv.config.LeafMCBE.debug,
+          }).info(
+            Colors.red("Unknown command, use /help to more information.", true)
+          );
         }
       });
     });

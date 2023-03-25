@@ -425,12 +425,13 @@ World:
           _.filter((_v, i) => i !== 0).forEach((v) => arg.push(v));
         }
         var args = arg.join(" ").match(/(?:[^\s"]+|"[^"]*")+/g);
-
+        var exists;
         this.console.commands.forEach((cmd) => {
           if (
             cmdName.startsWith(`/${cmd.options.name.toLowerCase()}`) ||
             cmd.options.aliases?.includes(cmdName.replace("/", ""))
           ) {
+            exists = true;
             if (args && args.length < cmd.options.args.min)
               return new Player(client).send(
                 `Minimum argument is ${cmd.options.args.min} but got ${
@@ -468,6 +469,18 @@ ${arg.optional ? `[${arg.name}: ${arg.type}]` : `<${arg.name}: ${arg.type}>`}`
             );
           }
         });
+        if (!exists) {
+          client.queue("text", {
+            message: Colors.red(
+              "Unknown command, use /help to more information."
+            ),
+            type: "chat",
+            needs_transation: false,
+            source_name: "",
+            xuid: "",
+            platform_chat_id: "",
+          });
+        }
         break;
       case "interact":
         Interact(packet, client);
