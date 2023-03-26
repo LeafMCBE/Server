@@ -16,7 +16,7 @@ export default {
   player_gamemode: "fallback",
   player_position: {
     x: 0,
-    y: -58,
+    y: -200,
     z: 0,
   },
   rotation: {

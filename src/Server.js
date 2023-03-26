@@ -25,6 +25,7 @@ import Interact from "./packets/handler/Interact.js";
 import ContainerClose from "./packets/ContainerClose.js";
 import { mkdir } from "fs/promises";
 import LangSelector from "./lang/Selector.js";
+import Worlds from "./api/Worlds.js";
 
 class Server {
   /**
@@ -80,6 +81,15 @@ class Server {
    * @type {import('./lang/Selector.js').default}
    */
   lang;
+
+  /**
+   * World system.
+   *
+   * @private
+   * @readonly
+   * @type {any[]}
+   */
+  worlds;
 
   /**
    * Raknet Server.
@@ -201,6 +211,7 @@ World:
           version: String(this.config.Server.version),
         });
 
+        this.worlds = await Worlds(this);
         this.events.emit("onServerStarted", this);
         this.logger.srv.info(
           this.lang.startedOn
