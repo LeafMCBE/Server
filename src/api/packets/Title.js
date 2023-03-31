@@ -11,37 +11,75 @@
  */
 
 class Title {
-  constructor() {
-    this.text = null;
-    this.fadeIn = null;
-    this.fadeOut = null;
-    this.stayTime = null;
-  }
+  /**
+   * @private
+   */
+  text;
 
+  /**
+   * @private
+   */
+  fadeIn;
+
+  /**
+   * @private
+   */
+  fadeOut;
+
+  /**
+   * @private
+   */
+  stayTime;
+
+  /**
+   *
+   * @param {string} Text
+   * @returns {Title}
+   */
   setText(text) {
     this.text = text;
 
     return this;
   }
 
+  /**
+   *
+   * @param {number} number
+   * @returns {Title}
+   */
   setStayTime(number) {
     this.stayTime = number;
 
     return this;
   }
 
+  /**
+   *
+   * @param {number} number
+   * @returns {Title}
+   */
   setFadeIn(number) {
     this.fadeIn = number;
 
     return this;
   }
 
+  /**
+   *
+   * @param {number} number
+   * @returns {Title}
+   */
   setFadeOut(number) {
     this.fadeOut = number;
 
     return this;
   }
 
+  /**
+   *
+   * @param {import('../Player.js').default} player
+   * @returns {Title}
+   */
   execute(player) {
     player.client.queue("set_title", {
       type: 2,

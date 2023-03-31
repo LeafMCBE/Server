@@ -11,21 +11,47 @@
  */
 
 class Toast {
-  constructor() {
-    this.title = null;
-    this.message = null;
-  }
+  /**
+   * @private
+   * @type {string}
+   */
+  title;
 
+  /**
+   * @private
+   * @type {string}
+   */
+  message;
+
+  /**
+   *
+   * @param {string} text
+   * @returns {Toast}
+   */
   setTitle(text) {
     this.title = text;
+
+    return this;
   }
 
+  /**
+   *
+   * @param {string} text
+   * @returns {Toast}
+   */
   setMessage(text) {
     this.message = text;
+
+    return this;
   }
 
+  /**
+   *
+   * @param {import('../Player.js').default} player
+   * @returns {Toast}
+   */
   execute(player) {
-    player.client.write("toast_request", {
+    player.client.queue("toast_request", {
       title: this.title,
       message: this.message,
     });
