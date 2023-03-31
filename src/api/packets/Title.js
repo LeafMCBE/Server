@@ -20,22 +20,30 @@ class Title {
 
   setText(text) {
     this.text = text;
+
+    return this;
   }
 
   setStayTime(number) {
     this.stayTime = number;
+
+    return this;
   }
 
   setFadeIn(number) {
     this.fadeIn = number;
+
+    return this;
   }
 
   setFadeOut(number) {
     this.fadeOut = number;
+
+    return this;
   }
 
   execute(player) {
-    player.client.write("set_title", {
+    player.client.queue("set_title", {
       type: 2,
       text: this.text,
       fade_in_time: this.fadeIn,
@@ -44,6 +52,8 @@ class Title {
       xuid: "",
       platform_online_id: "",
     });
+
+    return this;
   }
 }
 
