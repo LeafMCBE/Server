@@ -1,3 +1,7 @@
+[![Discord](https://img.shields.io/discord/1072145422577041555?color=blue&label=Discord&style=for-the-badge)](https://discord.gg/MdkcEWjdEn)
+![Latest Tag](https://img.shields.io/github/v/tag/LeafMCBE/Server?label=LATEST%20TAG&style=for-the-badge)
+[![License](https://img.shields.io/github/license/LeafMCBE/Server?style=for-the-badge)](https://github.com/LeafMCBE/Server/blob/master/LICENSE)
+
 <img width="110px" align="left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnpI4HLNuBlCdaN5lmt3_h00OEMNZ7yiK8EqhgqRY&s"></img>
 
 <h1>LeafMCBE</h2>
