@@ -1,3 +1,6 @@
+# ARCHIVED
+We are switching the language to Typescript for more easy-to-use and easy-to-write. Check out https://github.com/LeafMCBE/LeafMCBE
+
 [![Discord](https://img.shields.io/discord/1072145422577041555?color=blue&label=Discord&style=for-the-badge)](https://discord.gg/MdkcEWjdEn)
 ![Latest Tag](https://img.shields.io/github/v/tag/LeafMCBE/Server?label=LATEST%20TAG&style=for-the-badge)
 [![License](https://img.shields.io/github/license/LeafMCBE/Server?style=for-the-badge)](https://github.com/LeafMCBE/Server/blob/master/LICENSE)
